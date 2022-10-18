@@ -1,4 +1,4 @@
-﻿event_src_site,ip_address,visitor_id,visit_number,visits,page_name,page_url,start_number,start_date,user_id,personalisation,seconds_spent,page_views,dwh_datum_vanaf,dwh_datum_tot,dwh_datum_aanmaak,dwh_datum_partitie,dwh_mog,dwh_scn
+event_src_site,ip_address,visitor_id,visit_number,visits,page_name,page_url,start_number,start_date,user_id,personalisation,seconds_spent,page_views,dwh_datum_vanaf,dwh_datum_tot,dwh_datum_aanmaak,dwh_datum_partitie,dwh_mog,dwh_scn
 twitter,193.0.1.12,ea12,10,32,index,www.index.com,44,12/12/2021 12:03,99,no,121,27,21/12/2021 11:09,22/12/2021 13:31,31/12/2021 12:01,11/12/2021 09:08,Great,Interesting
 youtube,127.0.0.1,sk09,11,45,home,www.home.com,22,22/02/2020 22:02,33,yes,432,55,23/02/2020 08:09,17/02/2020 15:51,26/02/2020 17:33,27/02/2020 14:14,stringslol,data
 c,194.1.0.14,gh44,12,21,cart,www.cart.com,23,11/11/2011 11:11,51,no,233,12,17/11/2011 16:02,09/11/2011 19:23,13/11/2011 14:03,01/11/2011 21:12,old,fun
