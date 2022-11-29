@@ -5,6 +5,10 @@ from matplotlib import pyplot as plt
 import nltk
 nltk.download('stopwords')
 
+word = "helloo"
+word = word[:-3]
+print(word)
+
 #Change paths
 private_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/private_scrape_results.xlsx")
 public_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/public_scrape_results.xlsx")
@@ -83,33 +87,35 @@ def clean_documents(corpus, words_to_remove, dutch):
         for word in words:
             if word not in words_to_remove:
                 if dutch:
-                    if "ing" in word and word.replace('ing', '') in words:
-                        stemmed_document.append(word.replace('ing', ''))
-                    elif "s" in word and word.replace('s', '') in words:
-                        stemmed_document.append(word.replace('s', ''))
-                    elif "ig" in word and word.replace('ig', '') in words:
-                        stemmed_document.append(word.replace('ig', ''))
-                    elif "isme" in word and word.replace('isme', '') in words:
-                        stemmed_document.append(word.replace('isme', ''))
-                    elif "lijk" in word and word.replace('lijk', '') in words:
-                        stemmed_document.append(word.replace('lijk', ''))
+                    if word.endswith("ing") and word[:-3] in words:
+                        stemmed_document.append(word[:-3])
+                    elif word.endswith("s") and word[:-1] in words:
+                        stemmed_document.append(word[:-1])
+                    elif word.endswith("ig") and word[:-2] in words:
+                        stemmed_document.append(word[:-2])
+                    elif word.endswith("isme") and word[:-4] in words:
+                        stemmed_document.append(word[:-4])
+                    elif word.endswith("lijk") and word[:-4] in words:
+                        stemmed_document.append(word[:-4])
+                    elif word.endswith("e") and word[:-1] in words:
+                        stemmed_document.append(word[:-1])
                     else:
                         stemmed_document.append(word)
                 elif not dutch:
-                    if "s" in word and word.replace('s', '') in words:
-                        stemmed_document.append(word.replace('s', ''))
-                    elif "ism" in word and word.replace('ism', '') in words:
-                        stemmed_document.append(word.replace('ism', ''))
-                    elif "ed" in word and word.replace('ed', '') in words:
-                        stemmed_document.append(word.replace('ed', ''))
-                    elif "al" in word and word.replace('al', '') in words:
-                        stemmed_document.append(word.replace('al', ''))
-                    elif "ist" in word and word.replace('ist', '') in words:
-                        stemmed_document.append(word.replace('ist', ''))
-                    elif "ity" in word and word.replace('ity', '') in words:
-                        stemmed_document.append(word.replace('ity', ''))
-                    elif "ness" in word and word.replace('ness', '') in words:
-                        stemmed_document.append(word.replace('ness', ''))
+                    if word.endswith("s") and word[:-1] in words:
+                        stemmed_document.append(word[:-1])
+                    elif word.endswith("ism") and word[:-3] in words:
+                        stemmed_document.append(word[:-3])
+                    elif word.endswith("ed") and word[:-2] in words:
+                        stemmed_document.append(word[:-2])
+                    elif word.endswith("al") and word[:-2] in words:
+                        stemmed_document.append(word[:-2])
+                    elif word.endswith("ist") and word[:-3] in words:
+                        stemmed_document.append(word[:-3])
+                    elif word.endswith("ity") and word[:-3] in words:
+                        stemmed_document.append(word[:-3])
+                    elif word.endswith("ness") and word[:-4] in words:
+                        stemmed_document.append(word[:-4])
                     else:
                         stemmed_document.append(word)
 
@@ -122,4 +128,3 @@ def clean_documents(corpus, words_to_remove, dutch):
 clean_corpus_dutch = clean_documents(corpus_dutch, words_to_remove_dutch, True)
 clean_corpus_english = clean_documents(corpus_english, words_to_remove_english, False)
 clean_corpus = clean_corpus_dutch + clean_corpus_english
-print(clean_corpus)
