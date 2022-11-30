@@ -61,8 +61,7 @@ def clean_documents(corpus, words_to_remove, dutch):
         # to the 'cleaned_document' variable.
         for word in words:
             word = word.lower()
-            if "xd" in word and word != 'exdeelnemers':
-                word = word.replace("xd", "")
+
             cleaned_document.append(word)
 
         # Now we can join all these words into a list and remove punctuation, numbers and double spaces.
@@ -80,6 +79,8 @@ def clean_documents(corpus, words_to_remove, dutch):
         # First, we check whether the current word does not appear in the 'words_to_remove' list and then we check whether we
         # can stem it.
         for word in words:
+            if "xd" in word and word != 'exdeelnemers':
+                word = word.replace("xd", "")
             if word not in words_to_remove:
                 if dutch:
                     if word.endswith("ing") and word[:-3] in words:
