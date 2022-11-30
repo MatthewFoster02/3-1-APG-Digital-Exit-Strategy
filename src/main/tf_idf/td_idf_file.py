@@ -5,13 +5,9 @@ from matplotlib import pyplot as plt
 import nltk
 nltk.download('stopwords')
 
-word = "helloo"
-word = word[:-3]
-print(word)
-
 #Change paths
-private_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/private_scrape_results.xlsx")
-public_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/public_scrape_results.xlsx")
+private_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/private_scrape_results.xlsx")
+public_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/public_scrape_results.xlsx")
 
 from nltk.corpus import stopwords
 
@@ -47,14 +43,13 @@ words_to_remove_english = english_stopwords + english_months
 def clean_documents(corpus, words_to_remove, dutch):
     for i in range(len(corpus)):
         # In order to work with the corpus, we first need to convert it to a string.
-        document = str(corpus[i])
-
+        document = str(corpus[i]).lower()
         # Replacing characters on which emphasis was placed. This helps avoiding the word 'maar' to appear both as
         # 'maar' and as 'máár' in the final cleaned corpus.
         document = document.replace("á", "a").replace("é", "e").replace("è", "e").replace("ó", "o").replace("ò",
                                                                                                             "o").replace(
             "í", "i")
-
+        document = document.translate(str.maketrans("", "", (string.punctuation + "’")))
         # Splitting our 'document' into a list of words, meaning we can now look at each word individually and
         # initializing a new variable 'clean_document' to which we can store all the words we want to retain.
         words = document.split()
@@ -66,8 +61,8 @@ def clean_documents(corpus, words_to_remove, dutch):
         # to the 'cleaned_document' variable.
         for word in words:
             word = word.lower()
-            if word[-2:] == "xD":
-                word = word[:-2]
+            if "xd" in word and word != 'exdeelnemers':
+                word = word.replace("xd", "")
             cleaned_document.append(word)
 
         # Now we can join all these words into a list and remove punctuation, numbers and double spaces.
@@ -128,3 +123,12 @@ def clean_documents(corpus, words_to_remove, dutch):
 clean_corpus_dutch = clean_documents(corpus_dutch, words_to_remove_dutch, True)
 clean_corpus_english = clean_documents(corpus_english, words_to_remove_english, False)
 clean_corpus = clean_corpus_dutch + clean_corpus_english
+
+
+#This max_df value seems not to give the wished results, if max_df=0.3, only words that appear in <30% of all docs should be considered
+vectorizer = TfidfVectorizer(max_df=1.0)
+vec_trained = vectorizer.fit_transform(clean_corpus)
+print(type(vec_trained.todense()))
+import pandas as pd
+pd.DataFrame(vec_trained.todense()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf.csv")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf_keywords.csv")
