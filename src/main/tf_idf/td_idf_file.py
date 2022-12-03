@@ -5,13 +5,9 @@ from matplotlib import pyplot as plt
 import nltk
 nltk.download('stopwords')
 
-word = "helloo"
-word = word[:-3]
-print(word)
-
 #Change paths
-private_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/private_scrape_results.xlsx")
-public_scrape = pd.read_excel("C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/public_scrape_results.xlsx")
+private_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/private_scrape_results.xlsx")
+public_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/public_scrape_results.xlsx")
 
 from nltk.corpus import stopwords
 
@@ -45,16 +41,34 @@ words_to_remove_english = english_stopwords + english_months
 # This function reduces the number of words in the passed on 'corpus' by removing the words in the 'words_to_remove',
 # replacing words on which emphasis is placed, stemming, and removing some unexpected characters.
 def clean_documents(corpus, words_to_remove, dutch):
+    all_words = []
+    for i in range(len(corpus)):
+        document = str(corpus[i]).lower()
+        document = document.replace("á", "a").replace("é", "e").replace("è", "e").replace("ó", "o").replace("ò",
+                                                                                                            "o").replace(
+            "í", "i")
+        cleaned_document = []
+        words = document.split()
+        for word in words:
+            word = word.lower()
+            cleaned_document.append(word)
+
+        # Now we can join all these words into a list and remove punctuation, numbers and double spaces.
+        cleaned_document = " ".join(cleaned_document)
+        cleaned_document = cleaned_document.translate(str.maketrans("", "", (string.punctuation + "’")))
+        cleaned_document = "".join([i for i in cleaned_document if not i.isdigit()])
+        while "  " in cleaned_document:
+            cleaned_document = cleaned_document.replace("  ", " ")
+        all_words += cleaned_document.split()
+    all_words = list(set(all_words))
     for i in range(len(corpus)):
         # In order to work with the corpus, we first need to convert it to a string.
-        document = str(corpus[i])
-
+        document = str(corpus[i]).lower()
         # Replacing characters on which emphasis was placed. This helps avoiding the word 'maar' to appear both as
         # 'maar' and as 'máár' in the final cleaned corpus.
         document = document.replace("á", "a").replace("é", "e").replace("è", "e").replace("ó", "o").replace("ò",
                                                                                                             "o").replace(
             "í", "i")
-
         # Splitting our 'document' into a list of words, meaning we can now look at each word individually and
         # initializing a new variable 'clean_document' to which we can store all the words we want to retain.
         words = document.split()
@@ -66,8 +80,7 @@ def clean_documents(corpus, words_to_remove, dutch):
         # to the 'cleaned_document' variable.
         for word in words:
             word = word.lower()
-            if word[-2:] == "xD":
-                word = word[:-2]
+
             cleaned_document.append(word)
 
         # Now we can join all these words into a list and remove punctuation, numbers and double spaces.
@@ -85,36 +98,40 @@ def clean_documents(corpus, words_to_remove, dutch):
         # First, we check whether the current word does not appear in the 'words_to_remove' list and then we check whether we
         # can stem it.
         for word in words:
+            if "xd" in word and word != 'exdeelnemers':
+                word = word.replace("xd", "")
             if word not in words_to_remove:
                 if dutch:
-                    if word.endswith("ing") and word[:-3] in words:
+                    if word.endswith("ing") and word[:-3] in all_words:
                         stemmed_document.append(word[:-3])
-                    elif word.endswith("s") and word[:-1] in words:
+                    elif word.endswith("s") and word[:-1] in all_words:
                         stemmed_document.append(word[:-1])
-                    elif word.endswith("ig") and word[:-2] in words:
+                    elif word.endswith("ig") and word[:-2] in all_words:
                         stemmed_document.append(word[:-2])
-                    elif word.endswith("isme") and word[:-4] in words:
+                    elif word.endswith("isme") and word[:-4] in all_words:
                         stemmed_document.append(word[:-4])
-                    elif word.endswith("lijk") and word[:-4] in words:
+                    elif word.endswith("lijk") and word[:-4] in all_words:
                         stemmed_document.append(word[:-4])
-                    elif word.endswith("e") and word[:-1] in words:
+                    elif word.endswith("e") and word[:-1] in all_words:
                         stemmed_document.append(word[:-1])
+                    elif word.endswith("en") and word[:-2] in all_words:
+                        stemmed_document.append(word[:-2])
                     else:
                         stemmed_document.append(word)
                 elif not dutch:
-                    if word.endswith("s") and word[:-1] in words:
+                    if word.endswith("s") and word[:-1] in all_words:
                         stemmed_document.append(word[:-1])
-                    elif word.endswith("ism") and word[:-3] in words:
+                    elif word.endswith("ism") and word[:-3] in all_words:
                         stemmed_document.append(word[:-3])
-                    elif word.endswith("ed") and word[:-2] in words:
+                    elif word.endswith("ed") and word[:-2] in all_words:
                         stemmed_document.append(word[:-2])
-                    elif word.endswith("al") and word[:-2] in words:
+                    elif word.endswith("al") and word[:-2] in all_words:
                         stemmed_document.append(word[:-2])
-                    elif word.endswith("ist") and word[:-3] in words:
+                    elif word.endswith("ist") and word[:-3] in all_words:
                         stemmed_document.append(word[:-3])
-                    elif word.endswith("ity") and word[:-3] in words:
+                    elif word.endswith("ity") and word[:-3] in all_words:
                         stemmed_document.append(word[:-3])
-                    elif word.endswith("ness") and word[:-4] in words:
+                    elif word.endswith("ness") and word[:-4] in all_words:
                         stemmed_document.append(word[:-4])
                     else:
                         stemmed_document.append(word)
@@ -128,3 +145,12 @@ def clean_documents(corpus, words_to_remove, dutch):
 clean_corpus_dutch = clean_documents(corpus_dutch, words_to_remove_dutch, True)
 clean_corpus_english = clean_documents(corpus_english, words_to_remove_english, False)
 clean_corpus = clean_corpus_dutch + clean_corpus_english
+
+
+#This max_df value seems not to give the wished results, if max_df=0.3, only words that appear in <30% of all docs should be considered
+vectorizer = TfidfVectorizer(max_df=0.5)
+vec_trained = vectorizer.fit_transform(clean_corpus)
+print(type(vec_trained.todense()))
+import pandas as pd
+# pd.DataFrame(vec_trained.todense()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf.csv")
+# pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf_keywords.csv")
