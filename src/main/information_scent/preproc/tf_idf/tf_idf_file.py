@@ -5,9 +5,16 @@ from matplotlib import pyplot as plt
 import nltk
 nltk.download('stopwords')
 
-#Change paths
-private_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/private_scrape_results.xlsx")
-public_scrape = pd.read_excel("C:/Users/01din/OneDrive/Documenten/apg-data/public_scrape_results.xlsx")
+# Change this variable and the path in the else statement below.
+laurence = True
+path = None
+if laurence:
+    path = "C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/"
+else:
+    path = "C:/Users/01din/OneDrive/Documenten/apg-data/"
+
+private_scrape = pd.read_excel(path + "private_scrape_results.xlsx")
+public_scrape = pd.read_excel(path + "public_scrape_results.xlsx")
 
 from nltk.corpus import stopwords
 
@@ -24,7 +31,7 @@ public_corpus = public_scrape_dutch.paragraph.tolist()
 public_corpus_english = public_scrape_english.paragraph.tolist()
 
 # Adding the 'private_corpus' and 'public_corpus' as they are both in Dutch.
-corpus_dutch = private_corpus + public_corpus
+corpus_dutch = public_corpus + private_corpus
 corpus_english = public_corpus_english
 
 # Defining which words in Dutch we want to remove before starting computing the tf-idf matrix.
@@ -151,6 +158,8 @@ clean_corpus = clean_corpus_dutch + clean_corpus_english
 vectorizer = TfidfVectorizer(max_df=0.5)
 vec_trained = vectorizer.fit_transform(clean_corpus)
 print(type(vec_trained.todense()))
-import pandas as pd
-# pd.DataFrame(vec_trained.todense()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf.csv")
-# pd.DataFrame(vectorizer.get_feature_names_out()).to_csv("C:/Users/01din/OneDrive/Documenten/apg-data/tf_idf_keywords.csv")
+
+pd.DataFrame(vec_trained.todense()).to_csv(path + "tf_idf.csv")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv(path + "tf_idf_keywords.csv")
+
+
