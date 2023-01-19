@@ -6,12 +6,12 @@ import nltk
 nltk.download('stopwords')
 
 # Change this variable and the path in the else statement below.
-laurence = True
+laurence = False
 path = None
 if laurence:
     path = "C:/Users/laure/OneDrive/Documenten/Project 3.1 APG Files/"
 else:
-    path = "C:/Users/01din/OneDrive/Documenten/apg-data/"
+    path = "C:/Users/01din/Desktop/Data APG/scrape_results/"
 
 private_scrape = pd.read_excel(path + "private_scrape_results.xlsx")
 public_scrape = pd.read_excel(path + "public_scrape_results.xlsx")
@@ -33,12 +33,11 @@ public_corpus_english = public_scrape_english.paragraph.tolist()
 # Adding the 'private_corpus' and 'public_corpus' as they are both in Dutch.
 corpus_dutch = public_corpus + private_corpus
 corpus_english = public_corpus_english
-
+corpus = corpus_dutch + corpus_english
 # Defining which words in Dutch we want to remove before starting computing the tf-idf matrix.
 dutch_stopwords = stopwords.words('dutch')
 dutch_months = ['Januari', "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December", 'januari', "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
 words_to_remove_dutch = dutch_stopwords + dutch_months
-
 # Defining which words in English we want to remove before starting computing the tf-idf matrix.
 english_stopwords = stopwords.words('english')
 english_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
@@ -149,17 +148,35 @@ def clean_documents(corpus, words_to_remove, dutch):
 
 
 # Cleaning the records in Dutch and the ones in English and later combining them to create a single corpus.
-clean_corpus_dutch = clean_documents(corpus_dutch, words_to_remove_dutch, True)
-clean_corpus_english = clean_documents(corpus_english, words_to_remove_english, False)
-clean_corpus = clean_corpus_dutch + clean_corpus_english
-
+# clean_corpus_dutch = clean_documents(corpus_dutch, words_to_remove_dutch, True)
+# clean_corpus_english = clean_documents(corpus_english, words_to_remove_english, False)
+# clean_corpus = clean_corpus_dutch + clean_corpus_english
 
 #This max_df value seems not to give the wished results, if max_df=0.3, only words that appear in <30% of all docs should be considered
-vectorizer = TfidfVectorizer(max_df=0.5)
-vec_trained = vectorizer.fit_transform(clean_corpus)
-print(type(vec_trained.todense()))
-
-pd.DataFrame(vec_trained.todense()).to_csv(path + "tf_idf.csv")
-pd.DataFrame(vectorizer.get_feature_names_out()).to_csv(path + "tf_idf_keywords.csv")
+print(corpus[862])
+for i in range(len(corpus)):
+    corpus[i] = str(corpus[i]).lower()
 
 
+vectorizer = TfidfVectorizer(max_df=1.0)
+vec_trained = vectorizer.fit_transform(corpus)
+
+
+pd.DataFrame(vec_trained.todense()).to_csv(path + "tf_idf_try.csv")
+pd.DataFrame(vectorizer.get_feature_names_out()).to_csv(path + "tf_idf_keywords_try.csv")
+keywords_tf_idf = pd.DataFrame(vectorizer.get_feature_names_out()).values.tolist()
+
+
+counter = 0
+list_words = []
+for sentence in corpus:
+    words = sentence.split()
+    for word in words:
+        list_words.append(word)
+
+for keyword in keywords_tf_idf:
+    for word in list_words:
+        if keyword[0] not in word:
+            counter += 1
+            print(keyword)
+print(counter)
