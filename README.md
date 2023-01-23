@@ -26,8 +26,7 @@ the most important features that capture maximum information about the dataset h
 
 
 ### 2) Information scent model:
-### Word2Vec
-Word2vec is a neural network-based language model that is trained to predict the likelihood of a word appearing in
+* **Word2vec** is a neural network-based language model that is trained to predict the likelihood of a word appearing in
 a certain context. It achieves this by using words that surround that
 word within a sentence and then outputs a vector representation of
 that word
