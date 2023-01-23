@@ -35,7 +35,7 @@ that word
 ### 3) Clustering
 * **DB-Scan**:Cluster complete visits such that similar visits are in one cluster
 
-### Evaluation: 
+### 4) Evaluation: 
 The evaluations of predicted IN takes place under the following assumptions:
 * The Goal page occurs late in the visit path
 * How much a user spend time in goal page
