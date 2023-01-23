@@ -14,15 +14,15 @@ therefore alerting the website that the customer needs human intervention.
 ### 1) TF-IDF Model:
 
 * **TF-IDF Model:** Convert doc into keywords with weight (based on the most relevant keywords). 
-* **TF_IDF + time:** Time also be included in the
+* **TF_IDF + time:** Time can also be included in the
 model by adjusting the TF-IDF weight Pages on which users usually.
 spend more time, might be more relevant).
-* **Predict IN** (information Need): When a user visit's length passed 3 , Implement a vector of keywords(word2vector).
+* **Predict IN** (information Need): When a user visit's length past 3 , Implement a vector of keywords(word2vector).
 
-Estimate the probability of the visit  whether path is straying from its optimal path or not.
+Estimate the probability of the visit  whether the path is straying from its optimal path or not.
 * **Markov Chain**:Mathematical system that experiences transitions from one state to another according to certain probabilistic rules. 
 * Cluster Analysis with **PCA**:PCA used for data reduction without losing its properties. Reducing dimensions of the DB-Scan clusters by selecting
-the most important features that capture maximum information about the dataset help to calculate visit distance to each cluster.  
+the most important features that capture maximum information about the dataset helps to calculate visit distance to each cluster.  
 
 
 ### 2) Information scent model:
@@ -40,5 +40,4 @@ that word
 The evaluations of predicted IN takes place under the following assumptions:
 * The Goal page occurs late in the visit path
 * How much a user spend time in goal page
-
 
