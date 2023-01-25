@@ -43,7 +43,7 @@ The evaluations of predicted IN takes place under the following assumptions:
 * With these assumptions, the similarity between the keywords on the goal page and the keywords of the predicted information need is computed.
 * No formal evaluations of the 
 
-### 4) Measuring User Stray: 
+### 5) Measuring User Stray: 
 * **Markov Chain**:Mathematical system that experiences transitions from one state to another according to certain probabilistic rules. 
 * For each cluster created, thus, for each group of similar visits, a Markov Chain is created. For all visits in the cluster, the transition probabilities are computed: the probabilities that from each page, you go to each other page.
 * In each state, the probability to reach a final state can be calculated. When this probability gets too low, a Digital Exit Strategy can be called.
